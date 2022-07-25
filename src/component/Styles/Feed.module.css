@@ -1,0 +1,15 @@
+.like_comment{
+    display: flex;
+    gap: 1rem;
+}
+.icons{
+    /* border: 1px solid red; */
+    color: rgb(175, 152, 152);
+    cursor: pointer;
+}
+.feedItem{
+    padding: 4%;
+}
+.feedItem p{
+    text-align: justify;
+}
