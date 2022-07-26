@@ -1,17 +1,22 @@
 // import './App.css';
-import Create from './component/Create';
+// import { useContext } from 'react';
+// import Create from './component/Create';
 import Feed from './component/Feed';
-import {Post, useRender} from './component/Storage';
+// import { Storage } from './component/Storage';
 // import LogIn from './component/LogIn';
 
+// import Navbar from "./component/Navbar";
+
 function App() {
+  // const render = useContext(Storage)
   return (
     <div className="App">
+      {/* <Navbar /> */}
       {/* <LogIn /> */}
-      <Post>
-        <Create />
-        {useRender() &&  <Feed /> }
-      </Post>
+      {/* {!render.renderfeed && <Create />}
+        
+        {render.renderfeed &&  <Feed />} */}
+        <Feed />
     </div>
   );
 }

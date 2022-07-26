@@ -1,19 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import CreateModal from './CreateModal'
 import classes from './Styles/Create.module.css'
+import { Storage } from './Storage'
 
 function Create() {
-    const [modal,setModal] = useState(false)
-    const createHandler = (event)=>{
-        setModal(true)
-    }
-    const modalCloser = ()=>{
-        setModal(false)
-    }
+  const detail = useContext(Storage)
   return (
     <div className={classes.create}>
-        {modal &&  <CreateModal closeModal={modalCloser}/>}
-        {!modal &&  <button onClick={createHandler}>Create Your Blog</button>}
+        {detail.modal &&  <CreateModal />}
+        {!detail.modal &&  <button onClick={detail.openModal}>Create Your Blog</button>}
     </div>
   )
 }
