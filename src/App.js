@@ -7,6 +7,7 @@ import Feed from './component/Feed';
 import LogIn from './component/LogIn';
 
 import Navbar from "./component/Navbar";
+import Register from './component/Register';
 
 function App() {
   // const render = useContext(Storage)
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' element={<Create />}/>
         <Route path='/login' element={<LogIn />} />
         <Route path='/feeds' element={<Feed />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </div>
   );
