@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./Styles/LogIn.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -6,6 +6,9 @@ import { Storage } from "./Storage";
 import { Link } from "react-router-dom";
 function LogIn() {
   const detail = useContext(Storage);
+  const [loginuser, setLoginUser] = useState("");
+  const [loginpass, setLoginPass] = useState("");
+  const [error,setError] = useState('')
   return (
     <div className={classes.login}>
       <div>
@@ -20,14 +23,39 @@ function LogIn() {
           <span>SIGN In</span>
           <FontAwesomeIcon icon={faLock} className={classes.lock} />
         </div>
-        <form className={classes.form} onSubmit={detail.aboutUser}>
+        <form
+          className={classes.form}
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (loginuser === "" || loginpass === "") {
+              setError("enter both email and password");
+              return;
+            }
+            detail.aboutUser(loginuser, loginpass);
+            setLoginUser("");
+            setLoginPass("");
+          }}
+        >
+          {error && <span style={{color:'red'}}>{error}</span>}
+          {detail.error && <span style={{color:'red'}}>{detail.error}</span>}
           <label>Email:</label>
-          <input onChange={detail.inputUser} />
-          <label type="password">Password:</label>
-          <input />
+          <input
+            onChange={(event) => {setLoginUser(event.target.value)
+            setError('')}}
+            value={loginuser}
+            placeholder='username'/>
+          <label>Password:</label>
+          <input
+            type="password"
+            onChange={(event) => {setLoginPass(event.target.value)
+          setError('')}}
+            value={loginpass}
+            placeholder='Enter password'/>
           <button type="submit">SIGN IN</button>
         </form>
-        <p style={{margin:0}}>Not a User?<Link to='/register'>Create New Account</Link></p>
+        <p style={{ margin: 0 }}>
+          Not a User?<Link to="/register">Create New Account</Link>
+        </p>
       </div>
     </div>
   );

@@ -1,11 +1,15 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 export const Storage = React.createContext();
 
 export function Post(props) {
   const [user, setUser] = useState("");
-  const [password,setPassword] = useState('')
-  const [enteredUser, setEnteredUser] = useState("");
+  const [error,setError] = useState('')
+  const [postError,setPostError] = useState('')
+  // const [password,setPassword] = useState('')
+  const [registerArray,setRegisterArray] =useState([{email:'kamal',pass:'1234'},{email:'kamal1',pass:'1234'}]);
+  // const [enteredUser, setEnteredUser] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
@@ -37,23 +41,30 @@ export function Post(props) {
   ]);
   const [renderfeed, setRenderfeed] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [editIndex, setEditIndex] = useState("");
+  const [editIndex, setEditIndex] = useState(-1);
   const [modal, setModal] = useState(false);
   const [currcomment, setCurrComment] = useState("");
   const navigate = useNavigate();
 
-  const inputUser = (event) => {
-    setEnteredUser(event.target.value);
-  };
 
-  const aboutUser = (event) => {
-    event.preventDefault();
-
-    setUser(enteredUser);
+  const aboutUser = (email,pass) => {
+    let arr = registerArray.some((item)=>item.email===email && item.pass===pass)
+    if(arr){
+      setError('')
+      setPostError('')
+      setUser(email)
     navigate("/");
+    }
+    else{
+      setError('user and password did not match')
+    }
   };
 
   const addLike = (val) => {
+    if(user===''){
+      setPostError('Login first')
+      return
+    }
     let index = post.indexOf(val);
     console.log(index + "index");
     let arr = [...post];
@@ -85,6 +96,14 @@ export function Post(props) {
   };
 
   const addComment = (val) => {
+    if(user===''){
+      setPostError('Login first')
+      return
+    }
+    if(currcomment===''){
+      setCurrComment('Add some comment')
+      return
+    }
     let index = post.indexOf(val);
     let arr = [...post];
     arr[index].comment = [{ [user]: currcomment }, ...arr[index].comment];
@@ -119,8 +138,15 @@ export function Post(props) {
   };
   const addPost = (event) => {
     event.preventDefault();
-
-    if (edit) {
+    if(user===''){
+      setPostError('Login first')
+      return
+    }
+    if(title==='' || category==='' || content ===''){
+      setPostError('All fields are mandatory')
+      return
+    }
+    if (editIndex>-1) {
       let currentPost = {
         title: title,
         category: category,
@@ -132,12 +158,15 @@ export function Post(props) {
       };
       let arr = [...post];
       arr.splice(editIndex, 1, currentPost);
-      setPost(arr);
+      console.log(arr);
+      setEditIndex(-1)
+      setPost([...arr]);
       setTitle("");
       setCategory("");
       setContent("");
       setRenderfeed(true);
       setModal(false);
+      setPostError('')
     } else {
       let currentPost = {
         title: title,
@@ -154,6 +183,7 @@ export function Post(props) {
       setContent("");
       setRenderfeed(true);
       setModal(false);
+      setPostError('')
       nav("/feeds");
     }
   };
@@ -165,6 +195,7 @@ export function Post(props) {
     setPost(arr);
   };
   const editPost = (val) => {
+    // delPost(val)
     setModal(true);
     setTitle(val.title);
     setCategory(val.category);
@@ -172,7 +203,15 @@ export function Post(props) {
     let index = post.indexOf(val);
     setEdit(true);
     setEditIndex(index);
+    document.documentElement.scrollTop = 4;
   };
+  const register =(email1,pass1,cnfpass1)=>{
+    let toAdd = {email:email1,pass:pass1,cnfpass:cnfpass1}
+    setRegisterArray([...registerArray,toAdd])
+  }
+  const logout =()=>{
+    setUser('')
+  }
   return (
     <>
       <Storage.Provider
@@ -195,11 +234,14 @@ export function Post(props) {
           newComment: newComment,
           addComment: addComment,
           addLike: addLike,
-          inputUser: inputUser,
           aboutUser: aboutUser,
           user: user,
           delComment: delComment,
-          currcomment:currcomment
+          currcomment:currcomment,
+          register:register,
+          error:error,
+          postError:postError,
+          logout:logout
         }}
       >
         {props.children}

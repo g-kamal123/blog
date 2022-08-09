@@ -5,8 +5,11 @@ import { useNavigate } from "react-router";
 function Register() {
   const detail = useContext(Storage);
   const nav = useNavigate();
-  const [rgsemail, setRgsEmail] = useState('');
-  const [rgspass, setRgsPass] = useState('');
+  const [rgsemail, setRgsEmail] = useState("");
+  const [rgspass, setRgsPass] = useState("");
+  const [rgscnfpass, setRgsCnfPass] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   return (
     <div className={classes.login}>
       <div>
@@ -21,18 +24,58 @@ function Register() {
           <h2>Create Account</h2>{" "}
           <button onClick={() => nav("/login")}>Login</button>
         </p>
-        <form className={classes.form} onSubmit={detail.aboutUser}>
+        <form
+          className={classes.form}
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (rgsemail === "0" || rgspass === "" || rgscnfpass === "") {
+              setError("All fiels are mandatory**");
+              return;
+            }
+            if(rgspass!==rgscnfpass){
+              setError('password does not match')
+              return;
+            }
+            detail.register(rgsemail, rgspass, rgscnfpass);
+            setRgsEmail("");
+            setRgsPass("");
+            setRgsCnfPass("");
+            setSuccess("Registered Succesfully");
+          }}
+        >
+          {error && <span style={{ color: "red" }}>{error}</span>}
+          {success && <span style={{ color: "green" }}>{success}</span>}
           <label>Email:</label>
-          <input onChange={(event) => setRgsEmail(event.target.value)} />
-          <label type="password">Password:</label>
           <input
-            type="password"
-            onChange={(event) => setRgsEmail(event.target.value)}
+            onChange={(event) => {
+              setRgsEmail(event.target.value);
+              setError("");
+              setSuccess("");
+            }}
+            placeholder="username"
+            value={rgsemail}
           />
-          <label type="password">Confirm Password:</label>
+          <label>Password:</label>
           <input
             type="password"
-            onChange={(event) => setRgsEmail(event.target.value)}
+            onChange={(event) => {
+              setRgsPass(event.target.value);
+              setError("");
+              setSuccess("");
+            }}
+            placeholder="Enter password"
+            value={rgspass}
+          />
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            onChange={(event) => {
+              setRgsCnfPass(event.target.value);
+              setError("");
+              setSuccess("");
+            }}
+            placeholder="confirm password"
+            value={rgscnfpass}
           />
           <button type="submit">Create Account</button>
         </form>

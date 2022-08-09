@@ -16,6 +16,7 @@ function Feed() {
       {detail.post.map((item) => (
         <div className={classes.feedItem}>
           <h2>Title:{item.title}</h2>
+          <span>by:{item.user}</span>
           <div className={classes.delEdit}>
             <h4>category:{item.category}</h4>
 
@@ -59,12 +60,16 @@ function Feed() {
               <span>{item.comment.length}</span>
             </p>
           </div>
+          {detail.postError && (
+            <span style={{ color: "red" }}>{detail.postError}</span>
+          )}
           {item.showcomm && (
             <div className={classes.showcomments}>
               <div className={classes.comment}>
                 <textarea
                   onChange={(event) => detail.newComment(item, event)}
-                value={detail.currcomment}></textarea>
+                  value={detail.currcomment}
+                ></textarea>
                 <button
                   className={classes.button}
                   onClick={() => detail.addComment(item)}
@@ -78,16 +83,14 @@ function Feed() {
                     {Object.keys(item1).map((it) => (
                       <>
                         <span className={classes.comm}>{it}</span>
-                        <span>
-                          {item1[it]}{" "}
-                          {it === detail.user && (
-                            <button
-                              onClick={() => detail.delComment(item1, item)}
-                            >
-                              delete
-                            </button>
-                          )}
-                        </span>
+                        <p>{item1[it]} </p>
+                        {it === detail.user && (
+                          <button
+                            onClick={() => detail.delComment(item1, item)}
+                          >
+                            delete
+                          </button>
+                        )}
                       </>
                     ))}
                   </div>

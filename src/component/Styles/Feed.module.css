@@ -14,9 +14,6 @@
 .feedItem{
     padding: 4%;
 }
-.comm{
-    text-align: justify;
-}
 .delEdit{
     display: flex;
     justify-content: space-between;
@@ -42,18 +39,23 @@
     justify-content: space-between;
     align-items: baseline;
     padding: 1% 15%;
-    gap: 2rem;
+    gap: 1rem;
 }
 .allcommentItem button{
     height: fit-content;
+    width: fit-content;
     border: none;
     background-color: none;
     color: rgb(14, 109, 187);
     cursor: pointer;
 }
+.allcommentItem span{
+    width: 2rem;
+}
 .allcommentItem p{
     display: block;
     text-align: justify;
+    width: 8rem;
 }
 /* .allcommentItem textarea{
     overflow: hidden;
