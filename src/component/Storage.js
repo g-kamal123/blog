@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 export const Storage = React.createContext();
 
 export function Post(props) {
+  const [image1,setImage1] = useState('')
   const [user, setUser] = useState("");
   const [error,setError] = useState('')
   const [postError,setPostError] = useState('')
@@ -25,6 +26,7 @@ export function Post(props) {
       comment: [{ dummyuser1: "comm1" }, { dummyuser2: "comm2" }],
       showcomm: false,
       liked: {},
+      image:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png'
     },
 
     {
@@ -37,6 +39,7 @@ export function Post(props) {
       comment: [{ dummyuser1: "comm22" }, { dummyuser2: "comm24" }],
       showcomm: false,
       liked: {},
+      image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'
     },
   ]);
   const [renderfeed, setRenderfeed] = useState(false);
@@ -136,7 +139,7 @@ export function Post(props) {
   const openModal = () => {
     setModal(true);
   };
-  const addPost = (event) => {
+  const addPost = (event,image) => {
     event.preventDefault();
     if(user===''){
       setPostError('Login first')
@@ -147,6 +150,8 @@ export function Post(props) {
       return
     }
     if (editIndex>-1) {
+      if(image==='')
+      image=image1
       let currentPost = {
         title: title,
         category: category,
@@ -155,6 +160,7 @@ export function Post(props) {
         showcomm: false,
         liked: { ...post[editIndex].liked },
         user: user,
+        image:image
       };
       let arr = [...post];
       arr.splice(editIndex, 1, currentPost);
@@ -176,9 +182,11 @@ export function Post(props) {
         showcomm: false,
         liked: {},
         user: user,
+        image:image
       };
       setPost((prePost) => [currentPost, ...prePost]);
       setTitle("");
+      setImage1("");
       setCategory("");
       setContent("");
       setRenderfeed(true);
@@ -203,6 +211,7 @@ export function Post(props) {
     let index = post.indexOf(val);
     setEdit(true);
     setEditIndex(index);
+    setImage1(val.image)
     document.documentElement.scrollTop = 4;
   };
   const register =(email1,pass1,cnfpass1)=>{
@@ -241,7 +250,8 @@ export function Post(props) {
           register:register,
           error:error,
           postError:postError,
-          logout:logout
+          logout:logout,
+          image1:image1
         }}
       >
         {props.children}

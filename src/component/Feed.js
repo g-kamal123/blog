@@ -38,7 +38,14 @@ function Feed() {
             )}
           </div>
           <hr />
-          <p>{item.content}</p>
+          <div style={{ display: "flex", gap: "1rem", flexDirection:'row'}}>
+            <img
+              src={item.image}
+              alt=""
+              style={{ maxHeight: "15rem", maxWidth: "15rem" }}
+            />
+            <p>{item.content}</p>
+          </div>
           <hr />
           <div className={classes.like_comment}>
             <p>
